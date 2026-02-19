@@ -29,7 +29,7 @@ export const AuthFormLayout: React.FC<AuthFormLayoutProps> = ({
 	action,
 }) => {
 	return (
-		<Card className="w-full max-w-md">
+		<Card className="w-full h-full max-w-md">
 			<CardHeader>
 				<CardTitle className="text-2xl font-bold text-center">
 					{title}

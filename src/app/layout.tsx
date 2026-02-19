@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
+import { Geist, Geist_Mono } from "next/font/google";
+import { ThemeProvider } from "@/provider/theme";
 import { Toaster } from "@/shared/ui";
 import "./globals.css";
 
@@ -21,11 +22,11 @@ export const metadata: Metadata = {
 
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 	return (
-		<html lang="en">
+		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${geistSans.variable} ${geistMono.variable} antialiased dark h-dvh w-dvw`}
+				className={`${geistSans.variable} ${geistMono.variable} antialiased h-dvh w-dvw`}
 			>
-				{children}
+				<ThemeProvider>{children}</ThemeProvider>
 				<NextTopLoader showSpinner={false} />
 				<Toaster />
 			</body>

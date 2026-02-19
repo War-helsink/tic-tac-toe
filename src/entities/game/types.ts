@@ -11,6 +11,7 @@ export type GameIdleEntity = {
 	creator: PlayerEntity;
 	field: Field;
 	status: "idle";
+	createdAt: Date;
 };
 
 export type GameInProgressEntity = {
@@ -18,6 +19,7 @@ export type GameInProgressEntity = {
 	players: PlayerEntity[];
 	field: Field;
 	status: "inProgress";
+	createdAt: Date;
 };
 
 export type GameOverEntity = {
@@ -26,6 +28,9 @@ export type GameOverEntity = {
 	field: Field;
 	status: "gameOver";
 	winner: PlayerEntity;
+	ratingChanges: RatingChangeEntity[];
+	gameOverAt: Date | null;
+	createdAt: Date;
 };
 
 export type GameOverDrawEntity = {
@@ -33,12 +38,22 @@ export type GameOverDrawEntity = {
 	players: PlayerEntity[];
 	field: Field;
 	status: "gameOverDraw";
+	ratingChanges: RatingChangeEntity[];
+	gameOverAt: Date | null;
+	createdAt: Date;
 };
 
 export type PlayerEntity = {
 	id: UserId;
 	login: string;
 	rating: number;
+};
+
+export type RatingChangeEntity = {
+	userId: UserId;
+	ratingBefore: number;
+	ratingAfter: number;
+	delta: number;
 };
 
 export type Field = (GameSymbol | null)[];

@@ -9,10 +9,10 @@ interface GameFieldProps {
 
 export const GameField: React.FC<GameFieldProps> = ({ game, onCellClick }) => {
 	return (
-		<div className="grid grid-cols-3">
+		<div className="grid grid-cols-3 gap-1">
 			{game.field.map((sybmol, index) => (
 				<button
-					className="border border-primary w-10 h-10 flex justify-center items-center cursor-pointer"
+					className="w-15 h-15 flex justify-center items-center aspect-square text-2xl font-bold rounded-xl bg-muted cursor-pointer"
 					key={index}
 					onClick={() => onCellClick?.(index)}
 					type="button"

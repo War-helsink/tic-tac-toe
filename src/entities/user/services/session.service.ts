@@ -1,8 +1,9 @@
 import "server-only";
 
-import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import type { NextRequest } from "next/server";
 import { error as errorFn, successful } from "@/shared/lib/either";
 import type { SessionEntity, UserEntity } from "../types";
 import { userToSession } from "../utils";
@@ -51,7 +52,7 @@ async function deleteSession() {
 
 const getSessionCookies = () => cookies().then((c) => c.get("session")?.value);
 
-const verifySession = async (getCookies = getSessionCookies) => {
+async function verifySession(getCookies = getSessionCookies) {
 	const cookie = await getCookies();
 	const session = await decrypt(cookie);
 
@@ -60,6 +61,21 @@ const verifySession = async (getCookies = getSessionCookies) => {
 	}
 
 	return { isAuth: true, session: session.value };
-};
+}
 
-export const sessionService = { addSession, deleteSession, verifySession };
+async function verifySessionProxy(request: NextRequest) {
+	const session = await decrypt(request.cookies.get("session")?.value);
+
+	if (session.type === "error") {
+		return { isAuth: false };
+	}
+
+	return { isAuth: true, session: session.value };
+}
+
+export const sessionService = {
+	addSession,
+	deleteSession,
+	verifySession,
+	verifySessionProxy,
+};

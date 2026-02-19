@@ -1,37 +1,40 @@
 "use client";
 
+import { use } from "react";
 import Link from "next/link";
 import type { GameIdleEntity } from "@/entities/game";
+import type { SessionEntity } from "@/entities/user";
 import { useEventsSource } from "@/shared/lib/sse/client";
 import { routes } from "@/shared/config";
 import { Button } from "@/shared/ui";
 import { GameCard } from "../ui/GameCard";
-import { CreateButton } from "../ui/CreateButton";
-import { Layout } from "../ui/Layout";
 
 interface GamesListClientProps {
-	games: GameIdleEntity[];
+	session: SessionEntity;
+	gamesPromise: Promise<GameIdleEntity[]>;
 }
 
-export const GamesListClient: React.FC<GamesListClientProps> = ({ games }) => {
+export const GamesListClient: React.FC<GamesListClientProps> = ({
+	session,
+	gamesPromise,
+}) => {
+	const games = use(gamesPromise);
 	const { dataStream: gamesStream = games } = useEventsSource<GameIdleEntity[]>(
 		routes.gamesStream(),
 	);
 
-	return (
-		<Layout actions={<CreateButton />}>
-			{gamesStream.map((game) => (
-				<GameCard
-					key={game.id}
-					login={game.creator.login}
-					rating={game.creator.rating}
-					actions={
-						<Link href={routes.game(game.id)}>
-							<Button>Connect</Button>
-						</Link>
-					}
-				/>
-			))}
-		</Layout>
-	);
+	return gamesStream.map((game) => (
+		<GameCard
+			key={game.id}
+			login={game.creator.login}
+			rating={game.creator.rating}
+			creatorId={game.creator.id}
+			currentUserId={session.id}
+			actions={
+				<Link href={routes.game(game.id)}>
+					<Button>Connect</Button>
+				</Link>
+			}
+		/>
+	));
 };

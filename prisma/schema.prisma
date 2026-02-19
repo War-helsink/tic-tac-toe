@@ -14,33 +14,73 @@ datasource db {
 }
 
 model Game {
-  id      String       @id @default(cuid())
-  status  GameStatus
-  players GamePlayer[] @relation("players")
-  field   Json?
+  id        String       @id @default(cuid())
+  status    GameStatus
+  field     Json?
 
-  winner     GamePlayer? @relation(fields: [winnerId], references: [id])
-  winnerId   String?
-  gameOverAt String?
+  players   GamePlayer[] @relation("GamePlayers")
+
+  winnerId  String?
+  winner    GamePlayer?  @relation(fields: [winnerId], references: [id])
+
+  ratingChanges RatingChange[]
+
+  createdAt  DateTime @default(now())
+  gameOverAt DateTime?
+
+  @@index([createdAt])
+  @@index([gameOverAt])
 }
 
 model GamePlayer {
   id     String @id @default(cuid())
+
   gameId String
-  game   Game   @relation("players", fields: [gameId], references: [id])
+  game   Game   @relation("GamePlayers", fields: [gameId], references: [id])
+
   userId String
   user   User   @relation(fields: [userId], references: [id])
+
   index  Int
+
   Game   Game[]
+
+  @@unique([gameId, userId])
+  @@index([userId])
 }
 
 model User {
-  id           String       @id @default(cuid())
-  login        String
-  rating       Int
+  id           String @id @default(cuid())
+  login        String @unique
+  rating       Int    @default(1000)
+
   passwordHash String
-  salt         String       @default("")
-  players      GamePlayer[]
+  salt         String @default("")
+
+  players       GamePlayer[]
+  ratingChanges RatingChange[]
+
+  @@index([rating])
+}
+
+model RatingChange {
+  id        String   @id @default(cuid())
+
+  gameId    String
+  game      Game     @relation(fields: [gameId], references: [id])
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  ratingBefore Int
+  ratingAfter  Int
+  delta        Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([gameId, userId])
+  @@index([userId])
+  @@index([gameId])
 }
 
 enum GameStatus {

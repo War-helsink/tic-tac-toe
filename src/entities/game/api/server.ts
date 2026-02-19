@@ -1,10 +1,16 @@
 import cuid from "cuid";
-import type { GameId } from "@/shared/types";
+import { GameStatus } from "@/generated/client";
+import type { GameId, UserId } from "@/shared/types";
 import { error, successful } from "@/shared/lib/either";
-import { gameRepositoryApi } from "./repositories";
-import type { GameIdleEntity, PlayerEntity } from "../types";
+import type {
+	GameIdleEntity,
+	GameOverDrawEntity,
+	GameOverEntity,
+	PlayerEntity,
+} from "../types";
 import { doStep } from "../utils";
 import { gameEvents } from "../server";
+import { gameRepositoryApi } from "./repositories";
 
 export const getGameById = (gameId: GameId) => {
 	return gameRepositoryApi.getGame({ id: gameId });
@@ -12,20 +18,45 @@ export const getGameById = (gameId: GameId) => {
 
 export async function getIdleGames(): Promise<GameIdleEntity[]> {
 	return gameRepositoryApi.gamesList({
-		status: "idle",
+		where: {
+			status: "idle",
+		},
 	}) as Promise<GameIdleEntity[]>;
+}
+
+export async function getUserGames(
+	userId: UserId,
+): Promise<(GameOverEntity | GameOverDrawEntity)[]> {
+	return gameRepositoryApi.gamesList({
+		where: {
+			players: {
+				some: {
+					userId: userId,
+				},
+			},
+			status: {
+				in: [GameStatus.gameOver, GameStatus.gameOverDraw],
+			},
+		},
+		orderBy: {
+			gameOverAt: "desc",
+		},
+		take: 12,
+	}) as Promise<(GameOverEntity | GameOverDrawEntity)[]>;
 }
 
 export async function createGame(player: PlayerEntity) {
 	const playerGames = await gameRepositoryApi.gamesList({
-		players: {
-			some: {
-				user: {
-					id: player.id,
+		where: {
+			players: {
+				some: {
+					user: {
+						id: player.id,
+					},
 				},
 			},
+			status: "idle",
 		},
-		status: "idle",
 	});
 
 	const isGameInIdleStatus = playerGames.some(
@@ -126,6 +157,7 @@ export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
 		...game,
 		status: "gameOver",
 		winner: game.players.find((p) => p.id !== player.id)!,
+		gameOverAt: new Date(),
 	});
 
 	await gameEvents.emit({
