@@ -30,6 +30,7 @@ export const GamesListClient: React.FC<GamesListClientProps> = ({
 			rating={game.creator.rating}
 			creatorId={game.creator.id}
 			currentUserId={session.id}
+			avatarConfig={game.creator.avatar}
 			actions={
 				<Link href={routes.game(game.id)}>
 					<Button>Connect</Button>

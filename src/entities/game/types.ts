@@ -1,4 +1,4 @@
-import type { GameId, UserId } from "@/shared/types";
+import type { AvatarConfig, GameId, UserId } from "@/shared/types";
 
 export type GameEntity =
 	| GameIdleEntity
@@ -47,6 +47,7 @@ export type PlayerEntity = {
 	id: UserId;
 	login: string;
 	rating: number;
+	avatar: Required<AvatarConfig>;
 };
 
 export type RatingChangeEntity = {

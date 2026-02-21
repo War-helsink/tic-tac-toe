@@ -57,6 +57,8 @@ model User {
   passwordHash String
   salt         String @default("")
 
+  avatar       Json
+
   players       GamePlayer[]
   ratingChanges RatingChange[]
 

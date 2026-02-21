@@ -7,7 +7,7 @@ import type {
 	RatingChange,
 } from "@/generated/client";
 import { prisma } from "@/shared/lib/prisma";
-import type { GameId } from "@/shared/types";
+import type { AvatarConfig, GameId } from "@/shared/types";
 import type {
 	GameEntity,
 	GameIdleEntity,
@@ -280,6 +280,7 @@ export function dbPlayerToPlayer(
 		id: db.user.id,
 		login: db.user.login,
 		rating: db.user.rating,
+		avatar: db.user.avatar as Required<AvatarConfig>,
 	};
 }
 

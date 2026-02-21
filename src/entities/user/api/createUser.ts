@@ -1,5 +1,6 @@
 import cuid from "cuid";
 import { error, successful } from "@/shared/lib/either";
+import { getDefaultAvatarConfig } from "@/shared/utils";
 import { DEFAULT_RATING } from "../config";
 import { passwordService } from "../services/password.service";
 import { userRepository } from "./repositories";
@@ -23,6 +24,7 @@ export async function createUser({ login, password }: createUserProps) {
 		login,
 		rating: DEFAULT_RATING,
 		passwordHash: hash,
+		avatar: getDefaultAvatarConfig(),
 		salt,
 	});
 

@@ -1,19 +1,33 @@
 import { prisma } from "@/shared/lib/prisma";
-import type { UserWhereInput } from "@/generated/models";
+import type {
+	UserCreateInput,
+	UserUpdateInput,
+	UserWhereInput,
+} from "@/generated/models";
 import type { UserEntity } from "../types";
+import type { AvatarConfig, UserId } from "@/shared/types";
 
-export function saveUser(user: UserEntity): Promise<UserEntity> {
+function saveUser(user: UserEntity): Promise<UserEntity> {
 	return prisma.user.upsert({
 		where: {
 			id: user.id,
 		},
-		create: user,
-		update: user,
-	});
+		create: user as UserCreateInput,
+		update: user as UserUpdateInput,
+	}) as unknown as Promise<UserEntity>;
 }
 
-export function getUser(where: UserWhereInput) {
+function getUser(where: UserWhereInput) {
 	return prisma.user.findFirst({ where });
 }
 
-export const userRepository = { saveUser, getUser };
+function saveUserAvatar(userId: UserId, avatarConfig: Required<AvatarConfig>) {
+	return prisma.user.update({
+		where: { id: userId },
+		data: {
+			avatar: avatarConfig,
+		},
+	});
+}
+
+export const userRepository = { saveUser, getUser, saveUserAvatar };

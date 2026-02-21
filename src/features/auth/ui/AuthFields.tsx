@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { Input, Label } from "@/shared/ui";
+import { Input, Label, PasswordInput } from "@/shared/ui";
 
 interface AuthFieldsProps {
 	formData?: FormData;
@@ -29,9 +29,8 @@ export const AuthFields: React.FC<AuthFieldsProps> = ({ errors, formData }) => {
 			</div>
 			<div className="space-y-2">
 				<Label htmlFor={passwordId}>Password</Label>
-				<Input
+				<PasswordInput
 					id={passwordId}
-					type="password"
 					name="password"
 					placeholder="Enter your password"
 					required
