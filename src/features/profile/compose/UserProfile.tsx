@@ -3,7 +3,7 @@
 import { useActionState, startTransition, useState } from "react";
 import type { UserEntity } from "@/entities/user";
 import { hasObjectChanged } from "@/shared/utils";
-import { AvatarEditor, Button } from "@/shared/ui";
+import { AvatarEditor, Button, LoadingButton } from "@/shared/ui";
 import { updateAvatarAction } from "../actions/updateAvatar";
 
 interface UserProfileProps {
@@ -24,12 +24,14 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 				updateAvatarConfig={setAvatarConfig}
 			/>
 			<div className="flex flex-row gap-6">
-				<Button
-					disabled={isPending || !hasObjectChanged(avatarConfig, state)}
+				<LoadingButton
+					className="w-16"
+					isLoading={isPending}
+					disabled={!hasObjectChanged(avatarConfig, state)}
 					onClick={() => startTransition(() => action(avatarConfig))}
 				>
 					Save
-				</Button>
+				</LoadingButton>
 				{hasObjectChanged(avatarConfig, state) && (
 					<Button variant="destructive" onClick={() => setAvatarConfig(state)}>
 						Cancel

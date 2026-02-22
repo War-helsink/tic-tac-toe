@@ -125,7 +125,7 @@ export const AvatarPartItem: React.FC<
 				type="button"
 				onClick={onClick}
 				className={cn(
-					"relative w-16 h-16 p-1 rounded-full border flex items-center justify-center transition-all duration-200",
+					"relative min-w-16 w-16 min-h-16 h-16 p-1 rounded-full border flex items-center justify-center transition-all duration-200",
 					isActive
 						? "opacity-100 border-indigo-600 ring-2 ring-indigo-500/40"
 						: "opacity-50 border-gray-300 hover:opacity-80",
@@ -144,7 +144,7 @@ export const AvatarPartItem: React.FC<
 			type="button"
 			onClick={onClick}
 			className={cn(
-				"relative w-16 h-16 p-3 rounded-full border flex items-center justify-center cursor-pointer bg-white transition-all duration-200",
+				"relative min-w-16 w-16 min-h-16 h-16 p-3 rounded-full border flex items-center justify-center cursor-pointer bg-white transition-all duration-200",
 				isActive
 					? "opacity-100 border-indigo-600 ring-2 ring-indigo-500/40"
 					: "opacity-50 border-gray-300 hover:opacity-80",

@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { startTransition, useActionState, useEffect } from "react";
-import { Button } from "@/shared/ui";
+import { LoadingButton } from "@/shared/ui";
 import { mapError, successful, type SuccessfulType } from "@/shared/lib/either";
 import { createGameAction } from "../actions/createGame";
 
@@ -23,8 +23,12 @@ export const CreateButton: React.FC = () => {
 	}, [state]);
 
 	return (
-		<Button disabled={isPending} onClick={() => startTransition(dispatch)}>
+		<LoadingButton
+			className="w-32"
+			isLoading={isPending}
+			onClick={() => startTransition(dispatch)}
+		>
 			Create a game
-		</Button>
+		</LoadingButton>
 	);
 };

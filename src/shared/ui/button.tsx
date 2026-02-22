@@ -3,6 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
 
 import { cn } from "@/shared/utils";
+import { Spinner } from "./spinner";
 
 const buttonVariants = cva(
 	"inline-flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
@@ -38,16 +39,19 @@ const buttonVariants = cva(
 	},
 );
 
-function Button({
+interface ButtonProps
+	extends React.ComponentProps<"button">,
+		VariantProps<typeof buttonVariants> {
+	asChild?: boolean;
+}
+
+const Button: React.FC<ButtonProps> = ({
 	className,
 	variant = "default",
 	size = "default",
 	asChild = false,
 	...props
-}: React.ComponentProps<"button"> &
-	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-	}) {
+}) => {
 	const Comp = asChild ? Slot.Root : "button";
 
 	return (
@@ -59,6 +63,19 @@ function Button({
 			{...props}
 		/>
 	);
-}
+};
 
-export { Button, buttonVariants };
+const LoadingButton: React.FC<ButtonProps & { isLoading?: boolean }> = ({
+	disabled,
+	isLoading,
+	children,
+	...prop
+}) => {
+	return (
+		<Button disabled={disabled || isLoading} {...prop}>
+			{isLoading ? <Spinner className="size-4" /> : children}
+		</Button>
+	);
+};
+
+export { Button, LoadingButton, buttonVariants };

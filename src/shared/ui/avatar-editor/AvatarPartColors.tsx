@@ -3,8 +3,9 @@
 import type {
 	CustomizableAvatarPartColor,
 	CustomizableAvatarPartColors,
-} from "@/shared/types";
+} from "../../types";
 import { AvatarPartColorItem } from "./AvatarPartColorItem";
+import styles from "./style.module.css";
 
 interface AvatarPartColorsProps {
 	readonly colors: CustomizableAvatarPartColors;
@@ -18,15 +19,17 @@ export const AvatarPartColors: React.FC<AvatarPartColorsProps> = ({
 	updateAvatarColor,
 }) => {
 	return (
-		<div className="flex gap-3">
-			{colors.map((color, index) => (
-				<AvatarPartColorItem
-					key={index}
-					isActive={avatarPartColor === color}
-					color={color}
-					onPress={() => updateAvatarColor(color)}
-				/>
-			))}
+		<div className={styles.list}>
+			<div className="flex gap-3 mx-auto w-min">
+				{colors.map((color, index) => (
+					<AvatarPartColorItem
+						key={index}
+						isActive={avatarPartColor === color}
+						color={color}
+						onPress={() => updateAvatarColor(color)}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

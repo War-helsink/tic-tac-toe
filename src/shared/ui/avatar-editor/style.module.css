@@ -1,0 +1,33 @@
+.list {
+	width: 100%;
+	padding-block: calc(var(--spacing) * 3);
+	display: flex;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+}
+
+@media (hover: hover) and (pointer: fine) {
+	.list {
+		scrollbar-width: thin;
+	}
+
+	.list::-webkit-scrollbar {
+		height: 6px;
+	}
+
+	.list::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.3);
+		border-radius: 4px;
+	}
+}
+
+@media (hover: none) and (pointer: coarse) {
+	.list {
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+	}
+
+	.list::-webkit-scrollbar {
+		display: none;
+	}
+}

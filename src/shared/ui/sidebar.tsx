@@ -325,7 +325,7 @@ const SidebarInset: React.FC<
 	return (
 		<main
 			className={cn(
-				"relative flex flex-1 h-full flex-col bg-background",
+				"w-0 relative flex flex-1 h-full flex-col bg-background",
 				"peer-data-[variant=inset]:h-[calc(100%-(--spacing(4)))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2 md:peer-data-[variant=inset]:ml-0 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm",
 				className,
 			)}

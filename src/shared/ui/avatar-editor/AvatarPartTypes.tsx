@@ -1,12 +1,13 @@
 "use client";
 
-import { AvatarPartItem } from "./AvatarPartItem";
 import type {
 	AvatarConfig,
 	AvatarPart,
 	CustomizableAvatarPartType,
 	CustomizableAvatarPartTypes,
-} from "@/shared/types";
+} from "../../types";
+import { AvatarPartItem } from "./AvatarPartItem";
+import styles from "./style.module.css";
 
 interface AvatarPartTypesProps {
 	readonly avatarConfig: Required<AvatarConfig>;
@@ -24,17 +25,19 @@ export const AvatarPartTypes: React.FC<AvatarPartTypesProps> = ({
 	updateAvatarType,
 }) => {
 	return (
-		<div className="flex gap-3">
-			{partTypes.map((partType, index) => (
-				<AvatarPartItem
-					key={index}
-					avatarPart={avatarPart}
-					avatarConfig={avatarConfig}
-					avatarPartType={partType}
-					onClick={() => updateAvatarType(partType)}
-					isActive={avatarPartType === partType}
-				/>
-			))}
+		<div className={styles.list}>
+			<div className="flex gap-3 mx-auto w-min">
+				{partTypes.map((partType, index) => (
+					<AvatarPartItem
+						key={index}
+						avatarPart={avatarPart}
+						avatarConfig={avatarConfig}
+						avatarPartType={partType}
+						onClick={() => updateAvatarType(partType)}
+						isActive={avatarPartType === partType}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

@@ -12,7 +12,7 @@ const PrivateLayout: React.FC<React.PropsWithChildren> = async ({
 
 	return (
 		<SessionProvider session={session}>
-			<div className="w-full h-full flex flex-col">
+			<div className="w-full h-full flex flex-col overflow-hidden">
 				<Header
 					center={<Logo />}
 					end={

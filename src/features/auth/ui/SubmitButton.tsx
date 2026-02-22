@@ -1,4 +1,4 @@
-import { Button } from "@/shared/ui";
+import { LoadingButton } from "@/shared/ui";
 
 interface SubmitButtonProps {
 	children: React.ReactNode;
@@ -10,8 +10,8 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
 	isPending,
 }) => {
 	return (
-		<Button disabled={isPending} type="submit" className="w-full">
+		<LoadingButton isLoading={isPending} type="submit" className="w-full">
 			{children}
-		</Button>
+		</LoadingButton>
 	);
 };
