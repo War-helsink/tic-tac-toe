@@ -102,6 +102,11 @@ export const GamePlayers: React.FC<GamePlayersProps> = ({ game }) => {
 					<div className="text-sm text-muted-foreground">Player O</div>
 					{secondPlayer && renderStatus(secondPlayer.id)}
 				</div>
+				{secondPlayer && (
+					<div>
+						<Avatar size={64} avatarConfig={secondPlayer.avatar} />
+					</div>
+				)}
 
 				<div className="text-lg font-semibold">
 					{secondPlayer?.login ?? "..."}
