@@ -12,9 +12,11 @@ export const GameLayout: React.FC<GameLayoutProps> = ({
 	players,
 }) => {
 	return (
-		<div className="flex flex-col items-center py-10 gap-4">
-			<div className="w-[400px] font-semibold tracking-tight">{players}</div>
-			<Card className="w-full max-w-[400px] shadow-xl">
+		<div className="flex flex-col items-center py-10 px-5 gap-4">
+			<div className="w-full max-w-[600px] font-semibold tracking-tight">
+				{players}
+			</div>
+			<Card className="w-full max-w-[600px] shadow-xl">
 				<CardHeader className="text-center">
 					<CardTitle> {status}</CardTitle>
 				</CardHeader>

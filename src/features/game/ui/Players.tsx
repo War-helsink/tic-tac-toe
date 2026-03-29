@@ -1,6 +1,6 @@
 import type { GameEntity, RatingChangeEntity } from "@/entities/game";
 import { getGameCurrentSymbol } from "@/entities/game";
-import { Card, Badge } from "@/shared/ui";
+import { Card, Badge, Avatar } from "@/shared/ui";
 import { cn } from "@/shared/utils";
 
 interface GamePlayersProps {
@@ -82,6 +82,9 @@ export const GamePlayers: React.FC<GamePlayersProps> = ({ game }) => {
 				<div className="flex items-center justify-between gap-4">
 					<div className="text-sm text-muted-foreground">Player X</div>
 					{renderStatus(firstPlayer.id)}
+				</div>
+				<div>
+					<Avatar size={64} avatarConfig={firstPlayer.avatar} />
 				</div>
 
 				<div className="text-lg font-semibold">{firstPlayer.login}</div>

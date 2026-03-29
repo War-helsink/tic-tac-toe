@@ -30,6 +30,7 @@ interface GamesListProps {
 	take?: number;
 	skip?: number;
 	where?: Prisma.GameWhereInput;
+	cursor?: Prisma.GameWhereUniqueInput;
 }
 
 async function gamesList({
@@ -37,12 +38,14 @@ async function gamesList({
 	take,
 	skip,
 	orderBy,
+	cursor,
 }: GamesListProps): Promise<GameEntity[]> {
 	const games = await prisma.game.findMany({
 		where,
 		take,
 		skip,
 		orderBy,
+		cursor,
 		include: gameInclude,
 	});
 

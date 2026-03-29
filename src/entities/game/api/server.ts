@@ -24,10 +24,20 @@ export async function getIdleGames(): Promise<GameIdleEntity[]> {
 	}) as Promise<GameIdleEntity[]>;
 }
 
-export async function getUserGames(
+export interface GetUserGamesPageResult {
+	games: (GameOverEntity | GameOverDrawEntity)[];
+	nextCursor: string | null;
+}
+
+const USER_GAMES_PAGE_SIZE = 12;
+
+export async function getUserGamesPage(
 	userId: UserId,
-): Promise<(GameOverEntity | GameOverDrawEntity)[]> {
-	return gameRepositoryApi.gamesList({
+	cursor?: string,
+): Promise<GetUserGamesPageResult> {
+	const take = USER_GAMES_PAGE_SIZE + 1;
+
+	const games = (await gameRepositoryApi.gamesList({
 		where: {
 			players: {
 				some: {
@@ -41,8 +51,26 @@ export async function getUserGames(
 		orderBy: {
 			gameOverAt: "desc",
 		},
-		take: 12,
-	}) as Promise<(GameOverEntity | GameOverDrawEntity)[]>;
+		take,
+		...(cursor
+			? {
+					cursor: { id: cursor },
+					skip: 1,
+				}
+			: {}),
+	})) as (GameOverEntity | GameOverDrawEntity)[];
+
+	const hasMore = games.length > USER_GAMES_PAGE_SIZE;
+	const pageGames = hasMore ? games.slice(0, USER_GAMES_PAGE_SIZE) : games;
+
+	const nextCursor = hasMore
+		? (pageGames[pageGames.length - 1]?.id ?? null)
+		: null;
+
+	return {
+		games: pageGames,
+		nextCursor,
+	};
 }
 
 export async function createGame(player: PlayerEntity) {
@@ -153,10 +181,15 @@ export async function surrenderGame(gameId: GameId, player: PlayerEntity) {
 		return error("player-is-not-in-game" as const);
 	}
 
+	const opponent = game.players.find((p) => p.id !== player.id);
+	if (!opponent) {
+		return error("player-is-not-in-game" as const);
+	}
+
 	const newGame = await gameRepositoryApi.saveGame({
 		...game,
 		status: "gameOver",
-		winner: game.players.find((p) => p.id !== player.id)!,
+		winner: opponent,
 		gameOverAt: new Date(),
 	});
 
